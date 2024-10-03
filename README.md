@@ -5,7 +5,7 @@ This repository is the official implementation of [Multi-label Sequential Senten
 
 ## Annotation guideline 
 
-The annotation guideline for our BIORC800 dataset can be find at [Link](https://docs.google.com/document/d/1hTlVTP0_3IW3ezXuCJtkz_j_Bv1rdMt2/edit?usp=sharing&ouid=112516947906182816396&rtpof=true&sd=true))
+The annotation guideline for our BIORC800 dataset can be find at [Link](https://docs.google.com/document/d/1hTlVTP0_3IW3ezXuCJtkz_j_Bv1rdMt2/edit?usp=sharing&ouid=112516947906182816396&rtpof=true&sd=true).
 ## Environment
 
 Create a conda environment by: 

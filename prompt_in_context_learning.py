@@ -108,9 +108,8 @@ def construct_dataset_train(paragraph, true_labels, model_retrieve, retrieve_df_
                             illustrations += "The paragraph is \"" + " ".join(
                                 i['sentences']) + "\". Select from rhetorical labels including background, motivation, hypothesis, goal, objective, method, result, experiment, conclusion"
                             for sentence, label in zip(i['sentences'], i['labels']):
-                                if sentence_count % 4 == 0:
-                                    illustrations += ", the sentence \"" + sentence + "\" plays rhetorical role in the paragraph as <" + label.lower().rstrip(
-                                        "s") + ">"
+                                illustrations += ", the sentence \"" + sentence + "\" plays rhetorical role in the paragraph as <" + label.lower().rstrip(
+                                    "s") + ">"
                                 sentence_count += 1
                         illustrations += " <End>\n"
                         sample_count += 1

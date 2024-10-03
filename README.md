@@ -46,7 +46,7 @@ To use different contrastive learning loss, you can specify the "contrastive_mod
 You can run the following command to train and test the muli-label LLM-SSC model using the dataset CS-ABSTRACT. Please download the CS-ABSTRACT dataset, change the data format, and put the dataset under the dataset_llm directory before running the following command: 
 
 ```
-python .\peft_tuning_with_space_thinking_with_no_additional_info.py --start_from_memory_bank_path=“csabstract_best.pickle" --start_from_memory_bank=True --contrastive_mode=“herocon” 
+python .\peft_tuning_with_space_thinking_with_no_additional_info.py --start_from_memory_bank_path=“csabstract_best.pickle" --contrastive_mode=“weighcon” 
 ```
 
 To use other single-label sequential sentence classification datasets, you can specify the "--dataset" parameter (choose from csabstract, pubmed_20k, and art_coresc) and the "--start_from_memory_bank_path" parameter. 

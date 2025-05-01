@@ -163,7 +163,6 @@ def preprocess_function(examples, dataset, tokenizer, max_length, labels_to_ids,
                 all_input_ids = [tokenizer.pad_token_id] * (max_length - len(input_ids)) + input_ids
                 all_label_ids = [-100] * (max_length - len(label_ids)) + label_ids
                 all_attention_masks = [0] * (max_length - len(attention_mask)) + attention_mask
-                # print("input prompt: ", f"{tokenizer.decode(input_ids)}")
 
                 input_ids_initial += input_ids
                 tokenized_label = tokenizer.tokenize(", ".join(label) + ">")
@@ -226,7 +225,6 @@ def preprocess_function(examples, dataset, tokenizer, max_length, labels_to_ids,
                     model_inputs["labels"].append(label_one_hot)
                     model_inputs["attention_mask"].append(all_attention_masks[:max_length])
                     # print(tokenizer.decode(input_ids))
-                print(tokenizer.decode(all_input_ids))
 
     print("long_seq_count: ", long_seq_count)
                 #
@@ -278,6 +276,8 @@ def find_best_thresholds(output, labels, labels_to_id, default_threshold):
                 else:
                     thresholds[label] = threshold
     print(thresholds)
+    with open('best_thresholds.json', 'w') as outfile:
+        json.dumps(thresholds)
     return thresholds
 
 def save_div(a, b):

@@ -1,5 +1,5 @@
 # LLM-SSC
-This repository is the official implementation of [Multi-label Sequential Sentence Classification via Large Language Model](https://arxiv.org/pdf/2411.15623) (EMNLP 2024 Findings) .
+This repository is the official implementation of [Multi-label Sequential Sentence Classification via Large Language Model](https://arxiv.org/pdf/2411.15623) (EMNLP 2024 Findings).
 
 ![Alt text](overview_prompt_llm.png) 
 
@@ -53,7 +53,7 @@ To use other single-label sequential sentence classification datasets, you can s
 
 ## Checkpoint (tuned on BIORC800) for model evaluation.
 
-You can find the checkpoint (tuned on BIORC800) through the [link](https://drive.google.com/file/d/1mODdcyyHCx-FkFV4h67dwcX27On_OMlF/view?usp=sharing). To use the checkpoint, put the uncompressed checkpoint in the directory and run the following command: 
+You can find the checkpoint (tuned on BIORC800) through the [link](https://drive.google.com/drive/folders/1IiBNcWhrCs28P-C-hVDfI1hGKgaVhnyl?usp=sharing). To use the checkpoint, put the uncompressed checkpoint in the directory and run the following command: 
 
 ```
 python .\peft_tuning_with_space_thinking_with_no_additional_info_multi_label_test.py  --dataset="biorc800"

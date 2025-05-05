@@ -171,6 +171,7 @@ def preprocess_function(examples, dataset, tokenizer, max_length, labels_to_ids,
 
                 if len(all_input_ids) > max_length:
                     long_seq_count += 1
+                    print("Long")
                     continue
                 else:
                     model_inputs["input_ids"].append(all_input_ids[:max_length])
@@ -199,6 +200,7 @@ def preprocess_function(examples, dataset, tokenizer, max_length, labels_to_ids,
                 input_text = tokenizer.decode(input_ids)
                 if len(all_input_ids) > max_length:
                     try:
+                        long_seq_count += 1
                         input_text = input_text.split("<End>")[1]
                     except:
                         continue
@@ -277,7 +279,7 @@ def find_best_thresholds(output, labels, labels_to_id, default_threshold):
                     thresholds[label] = threshold
     print(thresholds)
     with open('best_thresholds.json', 'w') as outfile:
-        json.dumps(thresholds)
+        json.dump(thresholds, outfile, indent=4)
     return thresholds
 
 def save_div(a, b):

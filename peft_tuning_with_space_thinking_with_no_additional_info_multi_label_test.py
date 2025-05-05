@@ -16,9 +16,13 @@ from sklearn.metrics import precision_score, recall_score, f1_score, classificat
 import random
 # from peft_tuning_with_space_thinking_with_no_additional_info_multi_label import contrastive_loss
 
-# random.seed(42)
-# torch.manual_seed(42)
-# np.random.seed(42)
+seed=42
+torch.manual_seed(seed)
+np.random.seed(seed)
+random.seed(seed)
+from sklearn.metrics import f1_score
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(seed)
 from numpy import unravel_index
 class EarlyStopper:
     def __init__(self, patience=1, min_delta=0):
@@ -125,7 +129,6 @@ def construct_dataset_single(data, model_retrieve, retrieve_df_train, dataset):
 
 def load_data(config, model_retrieve, mode, retrieve_df_train):
     data = load_json("data_llm/" + config.dataset + "/" + mode + ".jsonl")
-    data = data[:50]
     df = pd.DataFrame(data=construct_dataset_single(data, model_retrieve, retrieve_df_train, config.dataset))
     return df
 
@@ -341,9 +344,7 @@ def predict_thresholds(logits, thresholds, vocab, default_threshold):
             if inv_vocab[l] in thresholds:
                 if probs[idx, l] >= thresholds[inv_vocab[l]]:
                     output[l]=1
-            else:
-                if probs[idx, l] >= default_threshold:
-                    output[l]=1
+
         if 1 not in output:
             output[np.argmax(probs[idx]).item()]=1
         else:
@@ -456,6 +457,7 @@ def train_llm(config):
     val_df = load_data(config, model_retrieve, "dev", retrieve_df_train)
     test_df = load_data(config, model_retrieve, "test", retrieve_df_train)
 
+    print(test_df)
     train_dataset = Dataset.from_pandas(pd.DataFrame(data=train_df))
     val_dataset = Dataset.from_pandas(pd.DataFrame(data=val_df))
     test_dataset = Dataset.from_pandas(pd.DataFrame(data=test_df))
@@ -646,6 +648,11 @@ def train_llm(config):
     all_test_labels = []
     all_input_samples = []
 
+    print("testing results: ")
+    with open("best_thresholds.json", 'r') as f:
+        best_thresholds = json.load(f)
+    print(best_thresholds)
+
     model.eval()
     model.load_state_dict(torch.load("./best_model.mdl")['model'])
     test_total_loss = 0.0
@@ -663,8 +670,6 @@ def train_llm(config):
         all_test_labels.extend(batch["labels"].cpu().numpy())
         all_input_samples.extend(batch["input_ids"].cpu().numpy())
 
-    print("testing results: ")
-    best_thresholds = {'background': 0.4, 'objective': 0.4, 'method': 0.4, 'result': 0.4, 'conclusion': 0.4, 'other': 0.4}
 
     predictions = predict_thresholds(all_test_outputs, best_thresholds, labels_to_ids, config.default_threshold)
     # predictions = predict(all_test_outputs, config.default_threshold)
@@ -673,8 +678,21 @@ def train_llm(config):
     gold_original_labels = [id_to_label[gold.argmax()] for gold in all_test_labels]
     original_samples = [tokenizer.decode(all_input_ids) for all_input_ids in all_input_samples]
 
-    pred_df = pd.DataFrame(list(zip(pred_original_labels, gold_original_labels, original_samples)), columns=['pred', 'gold', "text"])
+    sentences = test_df.sentences.to_list()
+    pred_original_labels = [
 
+
+
+        [id_to_label[i] for i, val in enumerate(pred) if val == 1]
+        for pred in predictions
+    ]
+    gold_original_labels = [
+        [id_to_label[i] for i, val in enumerate(pred) if val == 1]
+        for pred in all_test_labels
+    ]
+
+    sentences = [item for sublist in sentences for item in sublist]
+    pred_df = pd.DataFrame(list(zip(pred_original_labels, gold_original_labels, sentences)), columns=['pred', 'gold', 'sentences'])
     print(pred_df)
 
     pred_df.to_csv("predictions.csv")

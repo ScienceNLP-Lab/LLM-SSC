@@ -3,6 +3,7 @@ This repository is the official implementation of [Multi-label Sequential Senten
 
 ![Alt text](overview_prompt_llm.png) 
 
+
 ## Annotation guideline 
 
 The annotation guideline for our BIORC800 dataset can be find at [Link](https://docs.google.com/document/d/1hTlVTP0_3IW3ezXuCJtkz_j_Bv1rdMt2/edit?usp=sharing&ouid=112516947906182816396&rtpof=true&sd=true).
@@ -51,9 +52,12 @@ python .\peft_tuning_with_space_thinking_with_no_additional_info.py --start_from
 
 To use other single-label sequential sentence classification datasets, you can specify the "--dataset" parameter (choose from csabstract, pubmed_20k, and art_coresc) and the "--start_from_memory_bank_path" parameter. 
 
+
 ## Checkpoint (tuned on BIORC800) for model evaluation.
 
-You can find the checkpoint (tuned on BIORC800) through the [link](https://drive.google.com/drive/folders/1IiBNcWhrCs28P-C-hVDfI1hGKgaVhnyl?usp=sharing). To use the checkpoint, put the uncompressed checkpoint in the directory and run the following command: 
+Note that in the updated version of LLM-SSC, we introduce the dynamic thresholding method, which applies different thresholds to different categories. The thresholds for each category are learned based on the validation dataset. 
+
+You can find the checkpoint (tuned on BIORC800) through the [link](https://drive.google.com/drive/folders/1IiBNcWhrCs28P-C-hVDfI1hGKgaVhnyl?usp=sharing). To use the checkpoint, put the uncompressed checkpoint and the threshold file in the directory and run the following command: 
 
 ```
 python .\peft_tuning_with_space_thinking_with_no_additional_info_multi_label_test.py  --dataset="biorc800"
